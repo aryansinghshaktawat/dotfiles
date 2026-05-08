@@ -82,3 +82,21 @@ alias la='ls -A'
 alias reload='source ~/.zshrc'
 alias zshconfig='nano ~/.zshrc'
 alias finder='open .'
+
+# ------------------------------
+# update dot files and push
+# ------------------------------
+
+
+updatedot() {
+    cp ~/.zshrc ~/Desktop/dotfiles/
+    cp ~/.gitconfig ~/Desktop/dotfiles/
+    
+    cd ~/Desktop/dotfiles || return
+
+    git add .
+    git commit -m "$1"
+    git push
+}
+
+
