@@ -1,3 +1,15 @@
+# -----------------------------
+# Terminal Startup
+# -----------------------------
+
+clear
+neofetch
+
+
+# -----------------------------
+# Git Functions
+# -----------------------------
+
 gpush() {
     git add .
     git commit -m "$1"
@@ -5,29 +17,68 @@ gpush() {
 }
 
 
+# -----------------------------
+# Display Sleep Control
+# -----------------------------
+
 sleepoff() {
-    caffeinate -dimsu &
-    echo $! > ~/.caffeinate_pid
-    echo "Sleep disabled"
+    caffeinate -dimu &
+    echo $! > ~/.display_sleep_pid
+    echo "Display sleep disabled"
 }
 
 sleepon() {
-    if [ -f ~/.caffeinate_pid ]; then
-        kill $(cat ~/.caffeinate_pid)
-        rm ~/.caffeinate_pid
-        echo "Sleep enabled"
+    if [ -f ~/.display_sleep_pid ]; then
+        kill "$(cat ~/.display_sleep_pid)" 2>/dev/null
+        rm ~/.display_sleep_pid
+        echo "Display sleep enabled"
     else
-        echo "No active sleep blocker found"
+        echo "No active display sleep blocker found"
     fi
 }
 
-neofetch
 
-alias brewup="brew update && brew upgrade"
+# -----------------------------
+# Lid Closure Display Control
+# -----------------------------
 
-alias brewclean="brew cleanup"
+screenoff() {
+    sudo pmset -a disablesleep 1
+    echo "Mac will stay awake even when lid is closed"
+}
 
-alias screenoff 'sudo pmset -a disablesleep 1'
-alias screenon 'sudo pmset -a disablesleep 0'
+screenon() {
+    sudo pmset -a disablesleep 0
+    echo "Normal lid sleep behavior restored"
+}
 
-alias pyhs 'echo IP:  && python3 -m http.server'
+
+# -----------------------------
+# Homebrew Aliases
+# -----------------------------
+
+alias brewup='brew update && brew upgrade'
+alias brewclean='brew cleanup'
+
+
+# -----------------------------
+# Python HTTP Server
+# -----------------------------
+
+pyhs() {
+    echo "IP Address:"
+    ipconfig getifaddr en0
+    python3 -m http.server
+}
+
+
+# -----------------------------
+# Useful Aliases
+# -----------------------------
+
+alias c='clear'
+alias ll='ls -lah'
+alias la='ls -A'
+alias reload='source ~/.zshrc'
+alias zshconfig='nano ~/.zshrc'
+alias finder='open .'
